@@ -3,6 +3,11 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
+$autoloadPath = __DIR__ . '/vendor/autoload.php';
+if (file_exists($autoloadPath)) {
+    require_once $autoloadPath;
+}
+
 class CarsManagement extends Module
 {
     public function __construct()

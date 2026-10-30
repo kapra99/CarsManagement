@@ -1,0 +1,22 @@
+{
+    "name": "kapra99/carsmanagement",
+    "description": "PrestaShop 9 module for managing cars in a car dealership",
+    "type": "prestashop-module",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Aleksandar Kapra"
+        }
+    ],
+    "require": {
+        "php": ">=8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "PrestaShop\\Module\\CarsManagement\\": "src/"
+        }
+    },
+    "config": {
+        "prepend-autoloader": false
+    }
+}
