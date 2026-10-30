@@ -1,0 +1,21 @@
+# PrestaShop generates these cache files in the module folder
+config.xml
+config_*.xml
+
+# Composer dependencies (regenerate with "composer install")
+/vendor/
+
+# Tool caches
+.php-cs-fixer.cache
+.phpunit.result.cache
+*.log
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
