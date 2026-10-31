@@ -1,3 +1,6 @@
+# All car pages use the "Cars" tab for permissions (_legacy_controller)
+# and the menu highlight; the statistics page uses the "Statistics" tab.
+
 admin_carsmanagement_cars_index:
   path: /carsmanagement/cars
   methods: [GET]
@@ -5,6 +8,31 @@ admin_carsmanagement_cars_index:
     _controller: 'PrestaShop\Module\CarsManagement\Controller\Admin\CarController::indexAction'
     _legacy_controller: AdminCarsManagementCars
     _legacy_link: AdminCarsManagementCars
+
+admin_carsmanagement_cars_create:
+  path: /carsmanagement/cars/new
+  methods: [GET, POST]
+  defaults:
+    _controller: 'PrestaShop\Module\CarsManagement\Controller\Admin\CarController::createAction'
+    _legacy_controller: AdminCarsManagementCars
+
+admin_carsmanagement_cars_edit:
+  path: /carsmanagement/cars/{carId}/edit
+  methods: [GET, POST]
+  defaults:
+    _controller: 'PrestaShop\Module\CarsManagement\Controller\Admin\CarController::editAction'
+    _legacy_controller: AdminCarsManagementCars
+  requirements:
+    carId: \d+
+
+admin_carsmanagement_cars_delete:
+  path: /carsmanagement/cars/{carId}/delete
+  methods: [POST]
+  defaults:
+    _controller: 'PrestaShop\Module\CarsManagement\Controller\Admin\CarController::deleteAction'
+    _legacy_controller: AdminCarsManagementCars
+  requirements:
+    carId: \d+
 
 admin_carsmanagement_statistics:
   path: /carsmanagement/statistics

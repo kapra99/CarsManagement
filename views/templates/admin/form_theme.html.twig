@@ -1,0 +1,11 @@
+{#
+  Form theme of the module: the vertical Bootstrap 4 layout of the PrestaShop admin
+  (label above the field), with simpler error messages: red text, no box, no icon.
+#}
+{% use '@PrestaShop/Admin/TwigTemplateForm/bootstrap_4_layout.html.twig' %}
+
+{% block form_errors -%}
+  {%- for error in errors -%}
+    <small class="d-block text-danger mt-1">{{ error.message }}</small>
+  {%- endfor -%}
+{%- endblock form_errors %}

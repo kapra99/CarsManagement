@@ -4,8 +4,10 @@
 {% block content %}
   <div class="card">
     <h3 class="card-header">
-      <i class="material-icons">directions_car</i>
-      {{ 'Cars'|trans }} ({{ cars|length }})
+      <span>
+        <i class="material-icons">directions_car</i>
+        {{ 'Cars'|trans }} ({{ cars|length }})
+      </span>
     </h3>
     <div class="card-body">
       {% if cars is empty %}
@@ -22,13 +24,16 @@
               <th class="text-right">{{ 'Purchase price'|trans }}</th>
               <th class="text-right">{{ 'Sale price'|trans }}</th>
               <th>{{ 'Status'|trans }}</th>
+              <th class="text-right">{{ 'Actions'|trans }}</th>
             </tr>
           </thead>
           <tbody>
             {% for car in cars %}
               <tr>
                 <td>{{ car.id }}</td>
-                <td>{{ car.registrationNumber }}</td>
+                <td>
+                  {% if car.hasPlates %}{{ car.registrationNumber }}{% else %}<span class="text-muted">{{ 'No plates'|trans }}</span>{% endif %}
+                </td>
                 <td>{{ car.vin }}</td>
                 <td>{{ car.brand }}</td>
                 <td>{{ car.model }}</td>
@@ -42,6 +47,18 @@
                   {% else %}
                     <span class="badge badge-info">{{ 'In stock'|trans }}</span>
                   {% endif %}
+                </td>
+                <td class="text-right text-nowrap">
+                  <a class="btn btn-sm btn-outline-secondary" href="{{ path('admin_carsmanagement_cars_edit', {carId: car.id}) }}">
+                    <i class="material-icons">edit</i> {{ 'Edit'|trans }}
+                  </a>
+                  <form class="d-inline" method="post"
+                        action="{{ path('admin_carsmanagement_cars_delete', {carId: car.id}) }}"
+                        onsubmit="return confirm('{{ 'Delete this car and all its expenses?'|trans|e('js') }}');">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                      <i class="material-icons">delete</i> {{ 'Delete'|trans }}
+                    </button>
+                  </form>
                 </td>
               </tr>
             {% endfor %}

@@ -1,0 +1,30 @@
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+{% trans_default_domain 'Modules.Carsmanagement.Admin' %}
+{# Our form theme: label above the field (the admin default is horizontal) and plain red error text #}
+{% form_theme carForm '@Modules/carsmanagement/views/templates/admin/form_theme.html.twig' %}
+
+{% block content %}
+  {# Centered, not full width - like the forms of PrestaShop itself #}
+  <div class="row justify-content-center">
+    <div class="col-xl-6 col-lg-8">
+      {# The same template is used to add a car (car is null) and to edit one. #}
+      <div class="card">
+        <h3 class="card-header">
+          <i class="material-icons">directions_car</i>
+          {{ car is null ? 'New car'|trans : car.brand ~ ' ' ~ car.model ~ ' (' ~ (car.registrationNumber ?? 'No plates'|trans) ~ ')' }}
+        </h3>
+        {# novalidate: skip the browser's checks so the server-side validation messages are shown under the fields #}
+        {{ form_start(carForm, {attr: {novalidate: 'novalidate'}}) }}
+        <div class="card-body">
+          {{ form_widget(carForm) }}
+        </div>
+        <div class="card-footer d-flex justify-content-between">
+          <a class="btn btn-outline-secondary" href="{{ path('admin_carsmanagement_cars_index') }}">{{ 'Back to the list'|trans }}</a>
+          <button type="submit" class="btn btn-primary">{{ 'Save'|trans }}</button>
+        </div>
+        {{ form_end(carForm) }}
+      </div>
+
+    </div>
+  </div>
+{% endblock %}

@@ -72,7 +72,7 @@ class CarsManagement extends Module
         $queries = [
             'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'car` (
                 `id_car` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-                `registration_number` VARCHAR(16) NOT NULL,
+                `registration_number` VARCHAR(16) NULL DEFAULT NULL,
                 `vin` CHAR(17) NOT NULL,
                 `brand` VARCHAR(64) NOT NULL,
                 `model` VARCHAR(64) NOT NULL,
