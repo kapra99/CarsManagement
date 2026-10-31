@@ -7,7 +7,7 @@
   {# Centered, not full width - like the forms of PrestaShop itself #}
   <div class="row justify-content-center">
     <div class="col-xl-6 col-lg-8">
-      {# The same template is used to add a car (car is null) and to edit one. #}
+      {# The same template is used to add a car (car is null) and to edit one (with its expenses). #}
       <div class="card">
         <h3 class="card-header">
           <i class="material-icons">directions_car</i>
@@ -25,6 +25,70 @@
         {{ form_end(carForm) }}
       </div>
 
+      {% if car is not null %}
+        <div class="card mt-3">
+          <h3 class="card-header">
+            <i class="material-icons">receipt</i>
+            {{ 'Expenses'|trans }} ({{ car.expenses|length }})
+          </h3>
+          <div class="card-body">
+            {% if car.expenses is empty %}
+              <p>{{ 'This car has no expenses yet.'|trans }}</p>
+            {% else %}
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>{{ 'Date'|trans }}</th>
+                    <th>{{ 'Type'|trans }}</th>
+                    <th class="text-right">{{ 'Amount'|trans }}</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for expense in car.expenses %}
+                    <tr>
+                      <td>{{ expense.expenseDate|date('d.m.Y') }}</td>
+                      <td>{{ expenseTypes[expense.typeOfExpense]|default(expense.typeOfExpense)|trans }}</td>
+                      <td class="text-right">{{ expense.amount|number_format(2, ',', ' ') }} €</td>
+                      <td class="text-right">
+                        <form class="d-inline" method="post"
+                              action="{{ path('admin_carsmanagement_expenses_delete', {expenseId: expense.id}) }}"
+                              onsubmit="return confirm('{{ 'Delete this expense?'|trans|e('js') }}');">
+                          <button type="submit" class="btn btn-sm btn-outline-danger">
+                            <i class="material-icons">delete</i>
+                          </button>
+                        </form>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th colspan="2">{{ 'Total'|trans }}</th>
+                    <th class="text-right">{{ totalExpenses|number_format(2, ',', ' ') }} €</th>
+                    <th></th>
+                  </tr>
+                </tfoot>
+              </table>
+            {% endif %}
+
+            <h4 class="mt-4">{{ 'Add expense'|trans }}</h4>
+            {# expenseForm exists only on the edit page, so its theme is set here, not at the top #}
+            {% form_theme expenseForm '@Modules/carsmanagement/views/templates/admin/form_theme.html.twig' %}
+            {{ form_start(expenseForm, {attr: {novalidate: 'novalidate'}}) }}
+            <div class="row">
+              <div class="col-md-4">{{ form_row(expenseForm.expenseDate) }}</div>
+              <div class="col-md-4">{{ form_row(expenseForm.typeOfExpense) }}</div>
+              <div class="col-md-4">{{ form_row(expenseForm.amount) }}</div>
+            </div>
+            {{ form_rest(expenseForm) }}
+            <div class="text-right">
+              <button type="submit" class="btn btn-primary">{{ 'Add expense'|trans }}</button>
+            </div>
+            {{ form_end(expenseForm) }}
+          </div>
+        </div>
+      {% endif %}
     </div>
   </div>
 {% endblock %}

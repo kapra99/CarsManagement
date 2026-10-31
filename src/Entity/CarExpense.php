@@ -12,15 +12,15 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CarExpense
 {
-    // Fixed list so expenses can be grouped; stored as these keys in type_of_expense.
+    // Fixed list so expenses can be grouped: the key is stored in type_of_expense, the value is the label.
     public const TYPES = [
-        'repair',
-        'service',
-        'tires',
-        'cleaning',
-        'documents',
-        'transport',
-        'other',
+        'repair' => 'Repair',
+        'service' => 'Service',
+        'tires' => 'Tires',
+        'cleaning' => 'Cleaning',
+        'documents' => 'Documents',
+        'transport' => 'Transport',
+        'other' => 'Other',
     ];
 
     /**
@@ -39,7 +39,7 @@ class CarExpense
     /**
      * @ORM\Column(name="expense_date", type="date")
      */
-    private DateTime $expenseDate;
+    private ?DateTime $expenseDate;
 
     /**
      * @ORM\Column(name="type_of_expense", type="string", length=32)
@@ -49,7 +49,8 @@ class CarExpense
     /**
      * @ORM\Column(name="amount", type="decimal", precision=10, scale=2)
      */
-    private string $amount = '0.00';
+    // Nullable only in PHP: an empty form field arrives as null and the validator rejects it before saving.
+    private ?string $amount = null;
 
     /**
      * @ORM\Column(name="date_add", type="datetime")
@@ -87,12 +88,12 @@ class CarExpense
         return $this->car;
     }
 
-    public function getExpenseDate(): DateTime
+    public function getExpenseDate(): ?DateTime
     {
         return $this->expenseDate;
     }
 
-    public function setExpenseDate(DateTime $expenseDate): self
+    public function setExpenseDate(?DateTime $expenseDate): self
     {
         $this->expenseDate = $expenseDate;
 
@@ -111,12 +112,12 @@ class CarExpense
         return $this;
     }
 
-    public function getAmount(): string
+    public function getAmount(): ?string
     {
         return $this->amount;
     }
 
-    public function setAmount(string $amount): self
+    public function setAmount(?string $amount): self
     {
         $this->amount = $amount;
 

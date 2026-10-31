@@ -5,7 +5,9 @@ namespace PrestaShop\Module\CarsManagement\Controller\Admin;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use PrestaShop\Module\CarsManagement\Entity\Car;
+use PrestaShop\Module\CarsManagement\Entity\CarExpense;
 use PrestaShop\Module\CarsManagement\Form\CarType;
+use PrestaShop\Module\CarsManagement\Form\ExpenseType;
 use PrestaShopBundle\Controller\Admin\PrestaShopAdminController;
 use PrestaShopBundle\Security\Attribute\AdminSecurity;
 use Symfony\Component\Form\FormError;
@@ -68,6 +70,8 @@ class CarController extends PrestaShopAdminController
             return $this->redirectToCarListWithError();
         }
 
+        // Two forms on one page. Each has its own name ("car" / "expense"),
+        // so handleRequest() only picks up the form that was actually submitted.
         $carForm = $this->createForm(CarType::class, $car);
         $carForm->handleRequest($request);
 
@@ -79,9 +83,29 @@ class CarController extends PrestaShopAdminController
             }
         }
 
+        $expense = new CarExpense($car);
+        $expenseForm = $this->createForm(ExpenseType::class, $expense);
+        $expenseForm->handleRequest($request);
+
+        if ($expenseForm->isSubmitted() && $expenseForm->isValid()) {
+            $entityManager->persist($expense);
+            $entityManager->flush();
+            $this->addFlash('success', $this->trans('The expense was added.', [], self::DOMAIN));
+
+            return $this->redirectToRoute('admin_carsmanagement_cars_edit', ['carId' => $carId]);
+        }
+
+        $totalExpenses = 0.0;
+        foreach ($car->getExpenses() as $carExpense) {
+            $totalExpenses += (float) $carExpense->getAmount();
+        }
+
         return $this->render('@Modules/carsmanagement/views/templates/admin/car/form.html.twig', [
             'carForm' => $carForm->createView(),
+            'expenseForm' => $expenseForm->createView(),
             'car' => $car,
+            'expenseTypes' => CarExpense::TYPES,
+            'totalExpenses' => $totalExpenses,
             'layoutTitle' => $this->trans('Edit car %car%', ['%car%' => $car->getRegistrationNumber() ?? $car->getVin()], self::DOMAIN),
         ]);
     }
@@ -100,6 +124,22 @@ class CarController extends PrestaShopAdminController
         $this->addFlash('success', $this->trans('The car was deleted.', [], self::DOMAIN));
 
         return $this->redirectToRoute('admin_carsmanagement_cars_index');
+    }
+
+    #[AdminSecurity("is_granted('update', request.get('_legacy_controller'))", redirectRoute: 'admin_carsmanagement_cars_index')]
+    public function deleteExpenseAction(int $expenseId, EntityManagerInterface $entityManager): RedirectResponse
+    {
+        $expense = $entityManager->find(CarExpense::class, $expenseId);
+        if ($expense === null) {
+            return $this->redirectToCarListWithError();
+        }
+
+        $carId = $expense->getCar()->getId();
+        $entityManager->remove($expense);
+        $entityManager->flush();
+        $this->addFlash('success', $this->trans('The expense was deleted.', [], self::DOMAIN));
+
+        return $this->redirectToRoute('admin_carsmanagement_cars_edit', ['carId' => $carId]);
     }
 
     /**

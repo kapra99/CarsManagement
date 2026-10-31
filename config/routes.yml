@@ -1,4 +1,4 @@
-# All car pages use the "Cars" tab for permissions (_legacy_controller)
+# All car and expense pages use the "Cars" tab for permissions (_legacy_controller)
 # and the menu highlight; the statistics page uses the "Statistics" tab.
 
 admin_carsmanagement_cars_index:
@@ -33,6 +33,15 @@ admin_carsmanagement_cars_delete:
     _legacy_controller: AdminCarsManagementCars
   requirements:
     carId: \d+
+
+admin_carsmanagement_expenses_delete:
+  path: /carsmanagement/expenses/{expenseId}/delete
+  methods: [POST]
+  defaults:
+    _controller: 'PrestaShop\Module\CarsManagement\Controller\Admin\CarController::deleteExpenseAction'
+    _legacy_controller: AdminCarsManagementCars
+  requirements:
+    expenseId: \d+
 
 admin_carsmanagement_statistics:
   path: /carsmanagement/statistics
