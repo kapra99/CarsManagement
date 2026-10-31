@@ -1,0 +1,53 @@
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+{% trans_default_domain 'Modules.Carsmanagement.Admin' %}
+
+{% block content %}
+  <div class="card">
+    <h3 class="card-header">
+      <i class="material-icons">directions_car</i>
+      {{ 'Cars'|trans }} ({{ cars|length }})
+    </h3>
+    <div class="card-body">
+      {% if cars is empty %}
+        <p class="mb-0">{{ 'There are no cars yet.'|trans }}</p>
+      {% else %}
+        <table class="table">
+          <thead>
+            <tr>
+              <th>{{ 'ID'|trans }}</th>
+              <th>{{ 'Registration number'|trans }}</th>
+              <th>{{ 'VIN'|trans }}</th>
+              <th>{{ 'Brand'|trans }}</th>
+              <th>{{ 'Model'|trans }}</th>
+              <th class="text-right">{{ 'Purchase price'|trans }}</th>
+              <th class="text-right">{{ 'Sale price'|trans }}</th>
+              <th>{{ 'Status'|trans }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for car in cars %}
+              <tr>
+                <td>{{ car.id }}</td>
+                <td>{{ car.registrationNumber }}</td>
+                <td>{{ car.vin }}</td>
+                <td>{{ car.brand }}</td>
+                <td>{{ car.model }}</td>
+                <td class="text-right">{{ car.purchasePrice|number_format(2, ',', ' ') }} €</td>
+                <td class="text-right">
+                  {% if car.sold %}{{ car.salePrice|number_format(2, ',', ' ') }} €{% else %}—{% endif %}
+                </td>
+                <td>
+                  {% if car.sold %}
+                    <span class="badge badge-success">{{ 'Sold'|trans }}</span>
+                  {% else %}
+                    <span class="badge badge-info">{{ 'In stock'|trans }}</span>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

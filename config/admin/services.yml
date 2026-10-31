@@ -1,0 +1,8 @@
+services:
+  _defaults:
+    public: false
+    autowire: true
+    autoconfigure: true
+
+  PrestaShop\Module\CarsManagement\Controller\Admin\CarController: ~
+  PrestaShop\Module\CarsManagement\Controller\Admin\StatisticsController: ~

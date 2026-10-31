@@ -18,10 +18,36 @@ class CarsManagement extends Module
         $this->author = 'Aleksandar Kapra';
         $this->need_instance = 0;
         $this->ps_versions_compliancy = [
-            'min' => '8.0.0',
+            'min' => '9.0.0',
             'max' => '9.99.99',
         ];
         $this->bootstrap = true;
+
+        // Back office menu under SELL: "Cars" with the pages "Cars" and "Statistics".
+        // PrestaShop creates these tabs on install and removes them on uninstall.
+        // Statistics is a child of Cars: PrestaShop then copies "Cars" as the menu root
+        // (class name + "_MTR") and keeps the original as its first sub-item.
+        $this->tabs = [
+            [
+                'class_name' => 'AdminCarsManagementCars',
+                'parent_class_name' => 'SELL',
+                'route_name' => 'admin_carsmanagement_cars_index',
+                'name' => 'Cars',
+                'icon' => 'directions_car',
+                'visible' => true,
+                'wording' => 'Cars',
+                'wording_domain' => 'Modules.Carsmanagement.Admin',
+            ],
+            [
+                'class_name' => 'AdminCarsManagementStatistics',
+                'parent_class_name' => 'AdminCarsManagementCars',
+                'route_name' => 'admin_carsmanagement_statistics',
+                'name' => 'Statistics',
+                'visible' => true,
+                'wording' => 'Statistics',
+                'wording_domain' => 'Modules.Carsmanagement.Admin',
+            ],
+        ];
 
         parent::__construct();
 

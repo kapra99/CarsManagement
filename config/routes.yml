@@ -1,0 +1,15 @@
+admin_carsmanagement_cars_index:
+  path: /carsmanagement/cars
+  methods: [GET]
+  defaults:
+    _controller: 'PrestaShop\Module\CarsManagement\Controller\Admin\CarController::indexAction'
+    _legacy_controller: AdminCarsManagementCars
+    _legacy_link: AdminCarsManagementCars
+
+admin_carsmanagement_statistics:
+  path: /carsmanagement/statistics
+  methods: [GET]
+  defaults:
+    _controller: 'PrestaShop\Module\CarsManagement\Controller\Admin\StatisticsController::indexAction'
+    _legacy_controller: AdminCarsManagementStatistics
+    _legacy_link: AdminCarsManagementStatistics
