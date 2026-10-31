@@ -22,6 +22,14 @@ class ComposerStaticInit45436a7f5401546ba3c89ba46b0e0ecd
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'PrestaShop\\Module\\CarsManagement\\Controller\\Admin\\CarController' => __DIR__ . '/../..' . '/src/Controller/Admin/CarController.php',
+        'PrestaShop\\Module\\CarsManagement\\Controller\\Admin\\StatisticsController' => __DIR__ . '/../..' . '/src/Controller/Admin/StatisticsController.php',
+        'PrestaShop\\Module\\CarsManagement\\DemoData\\DemoDataLoader' => __DIR__ . '/../..' . '/src/DemoData/DemoDataLoader.php',
+        'PrestaShop\\Module\\CarsManagement\\Entity\\Car' => __DIR__ . '/../..' . '/src/Entity/Car.php',
+        'PrestaShop\\Module\\CarsManagement\\Entity\\CarExpense' => __DIR__ . '/../..' . '/src/Entity/CarExpense.php',
+        'PrestaShop\\Module\\CarsManagement\\Form\\CarType' => __DIR__ . '/../..' . '/src/Form/CarType.php',
+        'PrestaShop\\Module\\CarsManagement\\Form\\ExpenseType' => __DIR__ . '/../..' . '/src/Form/ExpenseType.php',
+        'PrestaShop\\Module\\CarsManagement\\Statistics\\CarStatistics' => __DIR__ . '/../..' . '/src/Statistics/CarStatistics.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

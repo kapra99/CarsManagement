@@ -7,4 +7,12 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
+    'PrestaShop\\Module\\CarsManagement\\Controller\\Admin\\CarController' => $baseDir . '/src/Controller/Admin/CarController.php',
+    'PrestaShop\\Module\\CarsManagement\\Controller\\Admin\\StatisticsController' => $baseDir . '/src/Controller/Admin/StatisticsController.php',
+    'PrestaShop\\Module\\CarsManagement\\DemoData\\DemoDataLoader' => $baseDir . '/src/DemoData/DemoDataLoader.php',
+    'PrestaShop\\Module\\CarsManagement\\Entity\\Car' => $baseDir . '/src/Entity/Car.php',
+    'PrestaShop\\Module\\CarsManagement\\Entity\\CarExpense' => $baseDir . '/src/Entity/CarExpense.php',
+    'PrestaShop\\Module\\CarsManagement\\Form\\CarType' => $baseDir . '/src/Form/CarType.php',
+    'PrestaShop\\Module\\CarsManagement\\Form\\ExpenseType' => $baseDir . '/src/Form/ExpenseType.php',
+    'PrestaShop\\Module\\CarsManagement\\Statistics\\CarStatistics' => $baseDir . '/src/Statistics/CarStatistics.php',
 );

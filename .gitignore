@@ -16,3 +16,6 @@ config_*.xml
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Created by PrestaShop on install to block web access to vendor/
+vendor/.htaccess
