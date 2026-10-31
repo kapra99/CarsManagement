@@ -96,10 +96,11 @@ class CarController extends PrestaShopAdminController
             return $this->redirectToRoute('admin_carsmanagement_cars_edit', ['carId' => $carId]);
         }
 
-        $totalExpenses = 0.0;
-        foreach ($car->getExpenses() as $carExpense) {
-            $totalExpenses += (float) $carExpense->getAmount();
-        }
+        // The database adds up the amounts (exact DECIMAL), PHP floats could lose cents.
+        $totalExpenses = $entityManager
+            ->createQuery('SELECT COALESCE(SUM(e.amount), 0) FROM ' . CarExpense::class . ' e WHERE e.car = :car')
+            ->setParameter('car', $car)
+            ->getSingleScalarResult();
 
         return $this->render('@Modules/carsmanagement/views/templates/admin/car/form.html.twig', [
             'carForm' => $carForm->createView(),

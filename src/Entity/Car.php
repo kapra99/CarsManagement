@@ -44,9 +44,10 @@ class Car
     private string $model = '';
 
     /**
+     * Nullable only in PHP: an empty form field arrives as null and the validator rejects it before saving.
+     *
      * @ORM\Column(name="purchase_price", type="decimal", precision=12, scale=2)
      */
-    // Nullable only in PHP: an empty form field arrives as null and the validator rejects it before saving.
     private ?string $purchasePrice = null;
 
     /**

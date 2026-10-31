@@ -47,9 +47,10 @@ class CarExpense
     private string $typeOfExpense = 'other';
 
     /**
+     * Nullable only in PHP: an empty form field arrives as null and the validator rejects it before saving.
+     *
      * @ORM\Column(name="amount", type="decimal", precision=10, scale=2)
      */
-    // Nullable only in PHP: an empty form field arrives as null and the validator rejects it before saving.
     private ?string $amount = null;
 
     /**
