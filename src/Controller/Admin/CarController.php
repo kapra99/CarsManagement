@@ -4,6 +4,7 @@ namespace PrestaShop\Module\CarsManagement\Controller\Admin;
 
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
+use PrestaShop\Module\CarsManagement\DemoData\DemoDataLoader;
 use PrestaShop\Module\CarsManagement\Entity\Car;
 use PrestaShop\Module\CarsManagement\Entity\CarExpense;
 use PrestaShop\Module\CarsManagement\Form\CarType;
@@ -140,6 +141,20 @@ class CarController extends PrestaShopAdminController
         $this->addFlash('success', $this->trans('The expense was deleted.', [], self::DOMAIN));
 
         return $this->redirectToRoute('admin_carsmanagement_cars_edit', ['carId' => $carId]);
+    }
+
+    #[AdminSecurity("is_granted('create', request.get('_legacy_controller'))", redirectRoute: 'admin_carsmanagement_cars_index')]
+    public function loadDemoDataAction(DemoDataLoader $demoDataLoader): RedirectResponse
+    {
+        $added = $demoDataLoader->load();
+
+        if ($added > 0) {
+            $this->addFlash('success', $this->trans('%count% demo cars were added.', ['%count%' => $added], self::DOMAIN));
+        } else {
+            $this->addFlash('info', $this->trans('The demo cars are already loaded.', [], self::DOMAIN));
+        }
+
+        return $this->redirectToRoute('admin_carsmanagement_statistics');
     }
 
     /**

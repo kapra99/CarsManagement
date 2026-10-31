@@ -43,6 +43,13 @@ admin_carsmanagement_expenses_delete:
   requirements:
     expenseId: \d+
 
+admin_carsmanagement_demo_data_load:
+  path: /carsmanagement/demo-data
+  methods: [POST]
+  defaults:
+    _controller: 'PrestaShop\Module\CarsManagement\Controller\Admin\CarController::loadDemoDataAction'
+    _legacy_controller: AdminCarsManagementCars
+
 admin_carsmanagement_statistics:
   path: /carsmanagement/statistics
   methods: [GET]

@@ -1,0 +1,6 @@
+{% trans_default_domain 'Modules.Carsmanagement.Admin' %}
+<form class="d-inline" method="post" action="{{ path('admin_carsmanagement_demo_data_load') }}">
+  <button type="submit" class="btn btn-sm btn-outline-primary">
+    <i class="material-icons">playlist_add</i> {{ 'Load demo cars'|trans }}
+  </button>
+</form>

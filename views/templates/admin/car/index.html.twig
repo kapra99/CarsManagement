@@ -3,15 +3,16 @@
 
 {% block content %}
   <div class="card">
-    <h3 class="card-header">
+    <h3 class="card-header d-flex justify-content-between align-items-center">
       <span>
         <i class="material-icons">directions_car</i>
         {{ 'Cars'|trans }} ({{ cars|length }})
       </span>
+      {{ include('@Modules/carsmanagement/views/templates/admin/_demo_data_button.html.twig') }}
     </h3>
     <div class="card-body">
       {% if cars is empty %}
-        <p class="mb-0">{{ 'There are no cars yet.'|trans }}</p>
+        <p class="mb-0">{{ 'There are no cars yet. Add one or load the demo cars.'|trans }}</p>
       {% else %}
         <table class="table">
           <thead>

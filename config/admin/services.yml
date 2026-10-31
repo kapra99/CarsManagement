@@ -7,6 +7,8 @@ services:
   PrestaShop\Module\CarsManagement\Controller\Admin\CarController: ~
   PrestaShop\Module\CarsManagement\Controller\Admin\StatisticsController: ~
 
+  PrestaShop\Module\CarsManagement\DemoData\DemoDataLoader: ~
+
   PrestaShop\Module\CarsManagement\Statistics\CarStatistics:
     arguments:
       $dbPrefix: '%database_prefix%'
