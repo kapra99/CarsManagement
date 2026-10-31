@@ -1,14 +1,124 @@
 {% extends '@PrestaShop/Admin/layout.html.twig' %}
 {% trans_default_domain 'Modules.Carsmanagement.Admin' %}
 
+{% macro eur(amount) %}{{ amount|number_format(2, ',', ' ') }} €{% endmacro %}
 {% block content %}
-  <div class="card">
-    <h3 class="card-header">
-      <i class="material-icons">insert_chart</i>
-      {{ 'Statistics'|trans }}
+  {% import _self as fmt %}
+  <div class="row">
+    {# 1. Sold vs in stock #}
+    <div class="col-lg-4">
+      <div class="card">
+        <h3 class="card-header"><i class="material-icons">directions_car</i> {{ 'Cars'|trans }}</h3>
+        <div class="card-body">
+          <table class="table mb-0">
+            <tr><td>{{ 'Sold'|trans }}</td><th class="text-right">{{ summary.sold }}</th></tr>
+            <tr><td>{{ 'In stock'|trans }}</td><th class="text-right">{{ summary.in_stock }}</th></tr>
+            <tr><td>{{ 'Total'|trans }}</td><th class="text-right">{{ summary.sold + summary.in_stock }}</th></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    {# 2. Price ranges by sale price #}
+    <div class="col-lg-4">
+      <div class="card">
+        <h3 class="card-header"><i class="material-icons">bar_chart</i> {{ 'Cars by sale price'|trans }}</h3>
+        <div class="card-body">
+          <table class="table mb-0">
+            {% for range in priceRanges %}
+              <tr>
+                <td>
+                  {% if range.from == 0 %}
+                    {{ 'under %to% €'|trans({'%to%': range.to|number_format(0, ',', ' ')}) }}
+                  {% else %}
+                    {{ range.from|number_format(0, ',', ' ') }} – {{ range.to|number_format(0, ',', ' ') }} €
+                  {% endif %}
+                </td>
+                <th class="text-right">{{ range.cars }}</th>
+              </tr>
+            {% else %}
+              <tr><td colspan="2">{{ 'No cars are sold yet.'|trans }}</td></tr>
+            {% endfor %}
+            <tr class="table-secondary">
+              <td>{{ 'Not sold yet'|trans }}</td>
+              <th class="text-right">{{ summary.in_stock }}</th>
+            </tr>
+          </table>
+          <small class="text-muted">{{ 'The lower bound is included: a car sold for exactly 10 000 € is in 10 000 – 20 000 €.'|trans }}</small>
+        </div>
+      </div>
+    </div>
+
+    {# 3. Top 5 by total expenses #}
+    <div class="col-lg-4">
+      <div class="card">
+        <h3 class="card-header"><i class="material-icons">trending_up</i> {{ 'Top 5 cars by expenses'|trans }}</h3>
+        <div class="card-body">
+          <table class="table mb-0">
+            {% for car in topByExpenses %}
+              <tr>
+                <td>{{ loop.index }}.</td>
+                <td>
+                  <a href="{{ path('admin_carsmanagement_cars_edit', {carId: car.id_car}) }}">{{ car.brand }} {{ car.model }}</a>
+                  <br><small class="text-muted">{{ car.registration_number ?? 'No plates'|trans }}</small>
+                </td>
+                <th class="text-right">{{ fmt.eur(car.total_expenses) }}</th>
+              </tr>
+            {% else %}
+              <tr><td>{{ 'No expenses yet.'|trans }}</td></tr>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {# 4. Margin per car + average margin of the sold cars #}
+  <div class="card mt-3">
+    <h3 class="card-header d-flex justify-content-between">
+      <span><i class="material-icons">euro_symbol</i> {{ 'Margin per car'|trans }}</span>
+      <span>
+        {{ 'Average margin of sold cars'|trans }}:
+        {% if averageMargin is null %}—{% else %}
+          <span class="{{ averageMargin < 0 ? 'text-danger' : 'text-success' }}">{{ fmt.eur(averageMargin) }}</span>
+        {% endif %}
+      </span>
     </h3>
     <div class="card-body">
-      <p class="mb-0">{{ 'Statistics will be shown here.'|trans }}</p>
+      <table class="table mb-0">
+        <thead>
+          <tr>
+            <th>{{ 'Car'|trans }}</th>
+            <th class="text-right">{{ 'Sale price'|trans }}</th>
+            <th class="text-right">{{ 'Purchase price'|trans }}</th>
+            <th class="text-right">{{ 'Expenses'|trans }}</th>
+            <th class="text-right">{{ 'Margin'|trans }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in margins %}
+            <tr>
+              <td>
+                <a href="{{ path('admin_carsmanagement_cars_edit', {carId: row.id_car}) }}">{{ row.brand }} {{ row.model }}</a>
+                <small class="text-muted">{{ row.registration_number ?? 'No plates'|trans }}</small>
+              </td>
+              <td class="text-right">{{ row.sale_price is null ? '—' : fmt.eur(row.sale_price) }}</td>
+              <td class="text-right">{{ fmt.eur(row.purchase_price) }}</td>
+              <td class="text-right">{{ fmt.eur(row.total_expenses) }}</td>
+              <td class="text-right">
+                {% if row.margin is null %}
+                  <span class="text-muted">{{ 'not sold'|trans }}</span>
+                {% else %}
+                  <strong class="{{ row.margin < 0 ? 'text-danger' : 'text-success' }}">{{ fmt.eur(row.margin) }}</strong>
+                {% endif %}
+              </td>
+            </tr>
+          {% else %}
+            <tr><td colspan="5">{{ 'There are no cars yet.'|trans }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <small class="text-muted">{{ 'Margin = sale price − purchase price − all expenses. Unsold cars have no margin yet.'|trans }}</small>
     </div>
   </div>
 {% endblock %}
